@@ -48,13 +48,13 @@ $(LIBLINEAR_OBJ): $(LIBLINEAR_SRC)
 #some python/opencv/numpy definition
 
 PYTHON_VERSION = 2.7
-PYTHON_INCLUDE = /usr/include/python$(PYTHON_VERSION)
+PYTHON_INCLUDE = /home/harrysocool/anaconda2/include/python2.7
 
 BOOST_INC = /usr/include
 BOOST_LIB = /usr/lib
 OPENCV_LIB = $$(pkg-config --libs opencv)
 OPENCV_INC = $$(pkg-config --cflags opencv)
-NUMPY_INCLUDE = /usr/local/lib/python$(PYTHON_VERSION)/dist-packages/numpy/core/include
+NUMPY_INCLUDE = /home/harrysocool/anaconda2/lib/python2.7/site-packages/numpy/core/include 
 
 #now compiling python liblinear wrapper
 
