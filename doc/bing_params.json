@@ -9,5 +9,5 @@
     "2nd_stage_weights_fn": "/home/harrysocool/Github/fast-rcnn/OP_methods/BING-Objectness/doc/2nd_stage_weights.json",
     "sizes_indeces_fn": "/home/harrysocool/Github/fast-rcnn/OP_methods/BING-Objectness/doc/sizes.txt",
 	"num_win_psz": 180,
-	"num_bbs":2000
+	"num_bbs":800
 }

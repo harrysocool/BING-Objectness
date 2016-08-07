@@ -1,4 +1,7 @@
 from bing import *
+import pandas as pd
+import scipy.io as sio
+
 
 def get_params_images():
     params_file  = '/home/harrysocool/Github/fast-rcnn/OP_methods/BING-Objectness/doc/bing_params.json'
@@ -60,5 +63,30 @@ def bing_demo(image_filepath):
 
     return bbs, scores
 
+def generate_all_image():
+    datasets_path = '/home/harrysocool/Github/fast-rcnn/DatabaseEars/'
+    image_index_output_path = os.path.join(datasets_path, '../', 'ear_recognition/data_file/image_index_list.csv')
+    mat_output_filename = os.path.join(datasets_path, '../','ear_recognition/data_file/all_boxes.mat')
+
+    list1 = pd.read_csv(image_index_output_path, header=None).values.flatten().tolist()
+
+    all_boxes = np.zeros((len(list1),), dtype=np.object)
+    for i in range(436,437,1):
+        bbs, _ = bing_demo(list1[i])
+        bbs1 = np.asarray(bbs, dtype=np.double) - 1
+        all_boxes[i] = bbs1
+        print('No. {} image processed with {} boxes'.format(i, len(bbs)))
+
+    sio.savemat(mat_output_filename, {'all_boxes': all_boxes})
+
 if __name__ == '__main__':
-    bbs, scores = bing_demo('/home/harrysocool/Pictures/2.jpg')
+    generate_all_image()
+
+    # image_path = '/home/harrysocool/Pictures/7.jpg'
+    # bbs, scores = bing_demo(image_path)
+    # im = cv2.imread(image_path)
+    # for i in range(5):
+    #     bbox = bbs[i]
+    #     cv2.rectangle(im, (bbox[0], bbox[1]), (bbox[2], bbox[3]), (0, 255, 0), 2)
+    # cv2.imshow('frame', im)
+    # cv2.waitKey(0)
