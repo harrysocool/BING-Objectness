@@ -4,7 +4,7 @@ import scipy.io as sio
 
 
 def get_params_images():
-    params_file  = '/home/harrysocool/Github/fast-rcnn/OP_methods/BING-Objectness/doc/bing_params.json'
+    params_file  = '/home/harrysocool/Github/fast-rcnn/OP_methods/BING_Objectness/doc/bing_params.json'
     if not os.path.exists(params_file):
         print "Specified file for parameters %s does not exist." % params_file
         sys.exit(2)

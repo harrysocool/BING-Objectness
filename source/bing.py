@@ -10,7 +10,7 @@ import json
 import getopt
 import random
 import numpy as np
-sys.path.insert(0, '/home/harrysocool/Github/fast-rcnn/OP_methods/BING-Objectness/build')
+sys.path.insert(0, '/home/harrysocool/Github/fast-rcnn/OP_methods/BING_Objectness/build')
 from filter_tig import FilterTIG
 
 
