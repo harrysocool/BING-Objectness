@@ -60,8 +60,9 @@ def bing_demo(image_filepath):
 
     b = Bing(w_1st, sizes, w_2nd, num_bbs_per_size_1st_stage=params["num_win_psz"], num_bbs_final=params["num_bbs"])
     bbs, scores = b.predict(image)
+    bbs1 = np.asarray(bbs, dtype=np.double) - 1
 
-    return bbs, scores
+    return bbs1, scores
 
 def generate_all_image():
     datasets_path = '/home/harrysocool/Github/fast-rcnn/DatabaseEars/'
@@ -73,8 +74,7 @@ def generate_all_image():
     all_boxes = np.zeros((len(list1),), dtype=np.object)
     for i in range(436,437,1):
         bbs, _ = bing_demo(list1[i])
-        bbs1 = np.asarray(bbs, dtype=np.double) - 1
-        all_boxes[i] = bbs1
+        all_boxes[i] = bbs
         print('No. {} image processed with {} boxes'.format(i, len(bbs)))
 
     sio.savemat(mat_output_filename, {'all_boxes': all_boxes})
