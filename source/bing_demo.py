@@ -1,3 +1,5 @@
+import gc
+
 from bing import *
 import pandas as pd
 import scipy.io as sio
@@ -27,7 +29,7 @@ def get_params_images():
         params["num_win_psz"] = 130
     return params
 
-def bing_demo(image_filepath):
+def bing_demo(image_filepath, box_num):
     params = get_params_images()
     params["image_file"] = image_filepath
     if not os.path.exists(params["image_file"]):
@@ -58,29 +60,41 @@ def bing_demo(image_filepath):
     f.close()
     w_2nd = json.loads(w_str)
 
-    b = Bing(w_1st, sizes, w_2nd, num_bbs_per_size_1st_stage=params["num_win_psz"], num_bbs_final=params["num_bbs"])
+    b = Bing(w_1st, sizes, w_2nd, num_bbs_per_size_1st_stage=params["num_win_psz"], num_bbs_final=box_num)
     bbs, scores = b.predict(image)
     bbs1 = np.asarray(bbs, dtype=np.double) - 1
 
     return bbs1, scores
 
-def generate_all_image():
-    datasets_path = '/home/harrysocool/Github/fast-rcnn/DatabaseEars/'
+def generate_all_image(start, end, datasets_path, box_num):
     image_index_output_path = os.path.join(datasets_path, '../', 'ear_recognition/data_file/image_index_list.csv')
     mat_output_filename = os.path.join(datasets_path, '../','ear_recognition/data_file/all_boxes.mat')
 
     list1 = pd.read_csv(image_index_output_path, header=None).values.flatten().tolist()
 
-    all_boxes = np.zeros((len(list1),), dtype=np.object)
-    for i in range(436,437,1):
-        bbs, _ = bing_demo(list1[i])
+    all_boxes = np.zeros((437,), dtype=np.object)
+    if (start)!= 1:
+        all = sio.loadmat(mat_output_filename)['all_boxes'][0]
+        all_boxes = all
+        pass
+    for i in range(start-1,end,1):
+        bbs, _ = bing_demo(list1[i], box_num)
         all_boxes[i] = bbs
-        print('No. {} image processed with {} boxes'.format(i, len(bbs)))
-
+        print('No. {} image processed with {} boxes'.format(i+1, len(bbs)))
     sio.savemat(mat_output_filename, {'all_boxes': all_boxes})
 
+
 if __name__ == '__main__':
-    generate_all_image()
+    datasets_path = '/home/harrysocool/Github/fast-rcnn/DatabaseEars/'
+    image_index_output_path = os.path.join(datasets_path, '../', 'ear_recognition/data_file/image_index_list.csv')
+    mat_output_filename = os.path.join(datasets_path, '../','ear_recognition/data_file/all_boxes.mat')
+
+    # a = sio.loadmat(mat_output_filename)['all_boxes'][0]
+    box_num = 800
+    stend = ([1,200],[201,437])
+
+    temp = stend[1]
+    generate_all_image(temp[0],temp[1],datasets_path, box_num)
 
     # image_path = '/home/harrysocool/Pictures/7.jpg'
     # bbs, scores = bing_demo(image_path)
